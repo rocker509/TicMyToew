@@ -125,7 +125,7 @@ public class TicTac
     public void reset(){
         for(int i = 0; i < board.length; i++){
             for (int j = 0; j < board[0].length; j++){
-                board[i][j] = "nope";
+                board[i][j] = "open";
             }
         }
     }
@@ -153,7 +153,7 @@ public class TicTac
             a--;
         }
         for(int i = 0; i < 3; i++){
-            if(board[i][0].equals(board[i][1]) && board[i][0].equals(board[i][2]) && !board[i][0].equals("nope")){
+            if(board[i][0].equals(board[i][1]) && board[i][0].equals(board[i][2]) && !board[i][0].equals("open")){
                 System.out.println("Player " + getMove1(a) + " Wins!!!");
                 System.out.println();
                 System.out.println();
@@ -161,20 +161,20 @@ public class TicTac
             }
         }
         for(int i = 0; i < 3; i++){
-            if(board[0][i].equals(board[1][i]) && board[0][i].equals(board[2][i]) && !board[0][i].equals("nope")){
+            if(board[0][i].equals(board[1][i]) && board[0][i].equals(board[2][i]) && !board[0][i].equals("open")){
                 System.out.println("Player " + getMove1(a) + " Wins!!!");
                 System.out.println();
                 System.out.println();
                 return true;
             }
         }
-        if(board[0][0].equals(board[1][1]) && board[0][0].equals(board[2][2]) && !board[0][0].equals("nope")){
+        if(board[0][0].equals(board[1][1]) && board[0][0].equals(board[2][2]) && !board[0][0].equals("open")){
             System.out.println("Player " + getMove1(a) + " Wins!!!");
             System.out.println();
             System.out.println();
             return true;
         }
-        if(board[2][0].equals(board[1][1]) && board[2][0].equals(board[0][2]) && !board[0][2].equals("nope")){
+        if(board[2][0].equals(board[1][1]) && board[2][0].equals(board[0][2]) && !board[0][2].equals("open")){
             System.out.println("Player " + getMove1(a) + " Wins!!!");
             System.out.println();
             System.out.println();
@@ -189,14 +189,14 @@ public class TicTac
         return false;
     }
     public void move(int player ,int x , int y){
-        if(board[y][x].equals("nope")){
+        if(board[y][x].equals("open")){
             board[y][x] = getMove(player);
         }
     }
     public boolean cats(){
         for(int i = 0; i < 3; i++){
             for(int j = 0; j < 3; j++){
-                if(board[i][j].equals("nope")){
+                if(board[i][j].equals("open")){
                     return false;
                 }
             }
@@ -223,7 +223,7 @@ public class TicTac
         if(x < 0 && x > 2 && y < 0 && y > 2){
             return false;
         }
-        if(board[y][x].equals("nope")){
+        if(board[y][x].equals("open")){
             return true;
         }
         return false;
