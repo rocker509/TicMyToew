@@ -35,8 +35,8 @@ public class TicTac
                 int y;
                 print();
                 do{
-                   
-                    if(player == 0){
+                    
+                    if(a == 0){
                         System.out.println("Player 1:");
                         do{
                             System.out.println();
@@ -46,15 +46,14 @@ public class TicTac
                             y = console.nextInt();
                             System.out.println();
                             if(checkSpot(x , y)){
-                                move(player , x , y);
-                                a = 1;
+                                move(a , x , y);
+                                a++;
                             }
                             else{
-                                 System.out.println("Spot taken");
+                                 System.out.println("Spot not Available");
                             }
                         }while(a == 0);
-                        player++;
-                        a = 0;
+                        
                     }
                     else{
                         System.out.println("Player 2:");
@@ -66,21 +65,60 @@ public class TicTac
                             y = console.nextInt();
                             System.out.println();
                             if(checkSpot(x , y)){
-                                move(player , x , y);
-                                a = 1;
+                                move(a , x , y);
+                                a--;
                             }
                             else{
-                                 System.out.println("Spot taken");
+                                 System.out.println("Spot not Available");
+                                 System.out.println();
                             }
-                        }while(a == 0);
-                        player++;
-                        a = 0;
+                        }while(a == 1);
+                        
                     }
                      print();
-                }while(!check());
+                }while(!check(a));
             }
             else if(u == 1){
-                
+                System.out.println("Player 1 = X      Computer 2 = O");
+                int player = 0;
+                int x;
+                int y;
+                print();
+                do{
+                    if(a == 0){
+                        System.out.println("Player 1:");
+                        do{
+                            System.out.println();
+                            System.out.print("X Coordinate: ");
+                            x = console.nextInt();
+                            System.out.print("Y Coordinate: ");
+                            y = console.nextInt();
+                            System.out.println();
+                            if(checkSpot(x , y)){
+                                move(a , x , y);
+                                a++;
+                            }
+                            else{
+                                 System.out.println("Spot not Available");
+                            }
+                        }while(a == 0);
+                        
+                    }
+                    else{
+                        System.out.println("Computer:");
+                        do{
+                            System.out.println();
+                            do{
+                                x = (int)(Math.random() * 3);
+                                y = (int)(Math.random() * 3);
+                            }while(!checkSpot(x , y));
+                            move(a , x , y);
+                            a--;
+                        }while(a == 1);
+                        
+                    }
+                     print();
+                }while(!check(a));
             }
         }while(u < 2 && u > -1);
     }
@@ -95,8 +133,9 @@ public class TicTac
         System.out.println();
         System.out.println();
         System.out.println();
-        System.out.println("0      1      2");
+        System.out.println("  0       1       2");
         for(int i = 0; i < board.length; i++){
+            System.out.print(i + " ");
             for (int j = 0; j < board[0].length; j++){
                 System.out.print(board[i][j] + "    ");
             }
@@ -106,25 +145,45 @@ public class TicTac
         System.out.println();
         System.out.println();
     }
-    public boolean check(){
+    public boolean check(int a){
+        if(a == 0){
+            a++;
+        }
+        else{
+            a--;
+        }
         for(int i = 0; i < 3; i++){
-            if(board[i][0].equals(board[i][1]) && board[i][0].equals(board[i][2]) && !board[0][i].equals("nope")){
-                System.out.println("1");
+            if(board[i][0].equals(board[i][1]) && board[i][0].equals(board[i][2]) && !board[i][0].equals("nope")){
+                System.out.println("Player " + getMove1(a) + " Wins!!!");
+                System.out.println();
+                System.out.println();
                 return true;
             }
         }
         for(int i = 0; i < 3; i++){
             if(board[0][i].equals(board[1][i]) && board[0][i].equals(board[2][i]) && !board[0][i].equals("nope")){
-                System.out.println("2");
+                System.out.println("Player " + getMove1(a) + " Wins!!!");
+                System.out.println();
+                System.out.println();
                 return true;
             }
         }
         if(board[0][0].equals(board[1][1]) && board[0][0].equals(board[2][2]) && !board[0][0].equals("nope")){
-            System.out.println("3");
+            System.out.println("Player " + getMove1(a) + " Wins!!!");
+            System.out.println();
+            System.out.println();
             return true;
         }
-        if(board[2][0].equals(board[1][1]) && board[2][0].equals(board[2][0]) && !board[0][2].equals("nope")){
-            System.out.println("4");
+        if(board[2][0].equals(board[1][1]) && board[2][0].equals(board[0][2]) && !board[0][2].equals("nope")){
+            System.out.println("Player " + getMove1(a) + " Wins!!!");
+            System.out.println();
+            System.out.println();
+            return true;
+        }
+        if(cats()){
+            System.out.println("Cats Game!");
+            System.out.println();
+            System.out.println();
             return true;
         }
         return false;
@@ -134,6 +193,16 @@ public class TicTac
             board[y][x] = getMove(player);
         }
     }
+    public boolean cats(){
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 3; j++){
+                if(board[i][j].equals("nope")){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     public String getMove(int x){
         if(x == 0){
             return "X   ";
@@ -142,10 +211,22 @@ public class TicTac
             return "O   ";
         }
     }
+    public String getMove1(int x){
+        if(x == 0){
+            return "1";
+        }
+        else{
+            return "2";
+        }
+    }
     public boolean checkSpot(int x, int y){
+        if(x < 0 && x > 2 && y < 0 && y > 2){
+            return false;
+        }
         if(board[y][x].equals("nope")){
             return true;
         }
         return false;
     }
 }
+
