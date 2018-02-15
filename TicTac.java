@@ -10,6 +10,7 @@ public class TicTac
     private String[][] board = new String[3][3];
     private Scanner console;
     private int a;
+    int size = 0;
     public TicTac(){
         console = new Scanner(System.in);
         int u;
@@ -25,9 +26,14 @@ public class TicTac
             System.out.println();
             System.out.print("Choice ----> ");
             System.out.println();
-            System.out.println();
-            System.out.println();
             u = console.nextInt();
+            if(u == 2){
+                break;
+            }
+            System.out.println("What size board would you like? (n X n)");
+            System.out.println();
+            System.out.print("n = ");
+            size = console.nextInt();
             if(u == 0){
                 System.out.println("Player 1 = X      Player 2 = O");
                 int player = 0;
