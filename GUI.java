@@ -9,7 +9,7 @@ import javax.swing.*;
 public class GUI extends JFrame implements ActionListener
 {
     // setting up ALL the variables
-    JFrame window = new JFrame("Kenneth's Tic Tac Toe Game");
+    JFrame window = new JFrame("Nate's Tic Tac Toe Game");
 
     JMenuBar mnuMain = new JMenuBar();
     JMenuItem   mnuNewGame = new JMenuItem("  New Game"), 
@@ -55,7 +55,7 @@ public class GUI extends JFrame implements ActionListener
         pnlNorth.setLayout(new FlowLayout(FlowLayout.CENTER));
         pnlSouth.setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        pnlNorth.setBackground(new Color(70, 70, 70));
+        pnlNorth.setBackground(Color.white);
         pnlSouth.setBackground(new Color(color, color, color));
 
         pnlTop.setBackground(new Color(color, color, color));
@@ -95,12 +95,12 @@ public class GUI extends JFrame implements ActionListener
         mnuStartingPlayer.addActionListener(this);
 
         // setting up the playing field
-        pnlPlayingField.setLayout(new GridLayout(3, 3, 2, 2));
+        pnlPlayingField.setLayout(new GridLayout(3, 3, 6, 6));
         pnlPlayingField.setBackground(Color.black);
         for(int x=1; x <= 9; ++x)   
         {
             btnEmpty[x] = new JButton();
-            btnEmpty[x].setBackground(new Color(220, 220, 220));
+            btnEmpty[x].setBackground(new Color(200, 200, 200));
             btnEmpty[x].addActionListener(this);
             pnlPlayingField.add(btnEmpty[x]);
             btnEmpty[x].setEnabled(setTableEnabled);
@@ -267,6 +267,58 @@ public class GUI extends JFrame implements ActionListener
 
     private void CheckWin() 
     {   
-        
+        String player;
+        if(startingPlayer.equals("X"))
+		{
+			if(remainingMoves % 2 != 0)
+			{				
+				player = "X";
+			}
+			else
+			{
+				player  = "O";
+			}
+		}
+		else
+		{
+			if(remainingMoves % 2 != 0)
+			{
+				player = "O";
+			}
+			else
+			{
+				player = "X";
+			}
+		}
+        for(int i = 1; i < btnEmpty.length; i += 3){
+            boolean a = true;
+            for(int j = i; j < i + 3; j++){
+                if(!btnEmpty[j].getText().equals(player)){
+                    a = false;
+                    break;
+                }
+            }
+            if(a){
+                System.out.println("Player: " + player + " Wins!!!!!!!");
+            }
+        }
+        for(int i = 1; i < btnEmpty.length / 3 + 1; i ++){
+            boolean a = true;
+            for(int j = i; j < btnEmpty.length; j += 3){
+                if(!btnEmpty[j].getText().equals(player)){
+                    a = false;
+                    break;
+                }
+            }
+            if(a){
+                System.out.println("Player: " + player + " Wins!!!!!!!");
+            }
+        }
+        if(btnEmpty[1].getText().equals(player) && btnEmpty[5].getText().equals(player) && btnEmpty[9].getText().equals(player)){
+             System.out.println("Player: " + player + " Wins!!!!!!!");
+        }
+        if(btnEmpty[7].getText().equals(player) && btnEmpty[5].getText().equals(player) && btnEmpty[3].getText().equals(player)){
+             System.out.println("Player: " + player + " Wins!!!!!!!");
+        }
     }
 }	
