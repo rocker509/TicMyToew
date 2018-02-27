@@ -260,7 +260,7 @@ public class TicTac
         for(int i = 0; i < board.length; i ++){
             int a = 0;
             for(int j = 0; j < board[0].length; j++){
-                if(!board[i][j].equals("X")){
+                if(!board[i][j].equals("-")){
                     a++;
                 }
             }
@@ -273,7 +273,7 @@ public class TicTac
                 }
             }
         }
-        for(int j = 0; j < board.length; j ++){
+        /*for(int j = 0; j < board.length; j ++){
             int a = 0;
             for(int i = 0; i < board[0].length; i++){
                 if(!board[i][j].equals("X")){
@@ -318,6 +318,13 @@ public class TicTac
                 }
             }
         }
+        */
+        int x;
+        int y;
+        do{
+            x = (int)(Math.random() * size);
+            y = (int)(Math.random() * size);
+        }while(board[x][y] != "-");
         move((int)(Math.random() * size) , (int)(Math.random() * size) , player);
     }
 }

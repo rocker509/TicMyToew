@@ -17,7 +17,8 @@ public class GUI extends JFrame implements ActionListener
     mnuStartingPlayer = new JMenuItem(" Starting Player"),
     mnuExit = new JMenuItem("    Quit");
 
-    JButton btnEmpty[] = new JButton[10];
+    JButton btnEmpty[];
+    private int size;
 
     JPanel  pnlNewGame = new JPanel(),
     pnlNorth = new JPanel(),
@@ -44,6 +45,8 @@ public class GUI extends JFrame implements ActionListener
     public GUI() //This is the constructor
     {
         //Setting window properties:
+        size = Integer.parseInt(JOptionPane.showInputDialog("n X n?"));
+        
         window.setSize(X, Y);
         window.setLocation(300, 180);
         window.setResizable(true);
@@ -95,9 +98,10 @@ public class GUI extends JFrame implements ActionListener
         mnuStartingPlayer.addActionListener(this);
 
         // setting up the playing field
-        pnlPlayingField.setLayout(new GridLayout(3, 3, 6, 6));
+        pnlPlayingField.setLayout(new GridLayout(size, size, 6, 6));
         pnlPlayingField.setBackground(Color.black);
-        for(int x=1; x <= 9; ++x)   
+        btnEmpty = new JButton[(size * size) + 1];
+        for(int x=1; x <= (size * size); ++x)   
         {
             btnEmpty[x] = new JButton();
             btnEmpty[x].setBackground(new Color(200, 200, 200));
@@ -123,9 +127,9 @@ public class GUI extends JFrame implements ActionListener
         Object source = click.getSource();
 
         // check if a button was clicked on the gameboard
-        for(int currentMove=1; currentMove <= 9; ++currentMove) 
+        for(int currentMove=1; currentMove <= (size * size); ++currentMove) 
         {
-            if(source == btnEmpty[currentMove] && remainingMoves < 10)  
+            if(source == btnEmpty[currentMove] && remainingMoves < (size * size) + 1)  
             {
                 btnEmptyClicked = true;
                 BusinessLogic.GetMove(currentMove, remainingMoves, font, 
@@ -256,7 +260,7 @@ public class GUI extends JFrame implements ActionListener
 
         remainingMoves = 1;
 
-        for(int x=1; x <= 9; ++x)   
+        for(int x=1; x <= (size * size); ++x)   
         {
             btnEmpty[x].setText("");
             btnEmpty[x].setEnabled(setTableEnabled);
@@ -269,56 +273,105 @@ public class GUI extends JFrame implements ActionListener
     {   
         String player;
         if(startingPlayer.equals("X"))
-		{
-			if(remainingMoves % 2 != 0)
-			{				
-				player = "X";
-			}
-			else
-			{
-				player  = "O";
-			}
-		}
-		else
-		{
-			if(remainingMoves % 2 != 0)
-			{
-				player = "O";
-			}
-			else
-			{
-				player = "X";
-			}
-		}
-        for(int i = 1; i < btnEmpty.length; i += 3){
+        {
+            if((remainingMoves-1) % 2 != 0)
+            {				
+                player = "X";
+            }
+            else
+            {
+                player  = "O";
+            }
+        }
+        else
+        {
+            if((remainingMoves-1) % 2 != 0)
+            {
+                player = "O";
+            }
+            else
+            {
+                player = "X";
+            }
+        }
+        for(int i = 1; i < btnEmpty.length; i += size){
             boolean a = true;
-            for(int j = i; j < i + 3; j++){
+            for(int j = i; j < i + size; j++){
                 if(!btnEmpty[j].getText().equals(player)){
                     a = false;
                     break;
                 }
             }
             if(a){
-                System.out.println("Player: " + player + " Wins!!!!!!!");
+                if(player.equals("X")){
+                    JOptionPane.showMessageDialog(null, "Player X Wins!!!!!");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Player O Wins!!!!!");
+                }
+                RedrawGameBoard();
             }
         }
-        for(int i = 1; i < btnEmpty.length / 3 + 1; i ++){
+        for(int i = 1; i < btnEmpty.length / size + 1; i ++){
             boolean a = true;
-            for(int j = i; j < btnEmpty.length; j += 3){
+            for(int j = i; j < btnEmpty.length; j += size){
                 if(!btnEmpty[j].getText().equals(player)){
                     a = false;
                     break;
                 }
             }
             if(a){
-                System.out.println("Player: " + player + " Wins!!!!!!!");
+                if(player.equals("X")){
+                    JOptionPane.showMessageDialog(null, "Player X Wins!!!!!");
+                }
+                else{
+                    JOptionPane.showMessageDialog(null, "Player O Wins!!!!!");
+                }
+                RedrawGameBoard();
             }
         }
-        if(btnEmpty[1].getText().equals(player) && btnEmpty[5].getText().equals(player) && btnEmpty[9].getText().equals(player)){
-             System.out.println("Player: " + player + " Wins!!!!!!!");
+        boolean a = true;
+        for(int i = 1; i < btnEmpty.length; i += (size + 1)){
+            if(!btnEmpty[i].getText().equals(player)){
+                a = false;
+                break;
+            }
         }
-        if(btnEmpty[7].getText().equals(player) && btnEmpty[5].getText().equals(player) && btnEmpty[3].getText().equals(player)){
-             System.out.println("Player: " + player + " Wins!!!!!!!");
+        if(a){
+            if(player.equals("X")){
+                JOptionPane.showMessageDialog(null, "Player X Wins!!!!!");
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Player O Wins!!!!!");
+            }
+            RedrawGameBoard();
+        }
+        a = true;
+        for(int i = btnEmpty.length - size; i > 1; i -= (size - 1)){
+            if(!btnEmpty[i].getText().equals(player)){
+                a = false;
+                break;
+            }
+        }
+        if(a){
+            if(player.equals("X")){
+                JOptionPane.showMessageDialog(null, "Player X Wins!!!!!");
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Player O Wins!!!!!");
+            }
+            RedrawGameBoard();
+        }
+        a = true;
+        for(int i = 1; i < btnEmpty.length; i++){
+            if(btnEmpty[i].getText().equals("")){
+                a = false;
+                break;
+            }
+        }
+        if(a){
+            JOptionPane.showMessageDialog(null, "Cats Game");
+            RedrawGameBoard();
         }
     }
 }	
