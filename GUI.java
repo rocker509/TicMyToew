@@ -19,6 +19,7 @@ public class GUI extends JFrame implements ActionListener
 
     JButton btnEmpty[];
     private int size;
+    private int AI;
 
     JPanel  pnlNewGame = new JPanel(),
     pnlNorth = new JPanel(),
@@ -46,7 +47,9 @@ public class GUI extends JFrame implements ActionListener
     {
         //Setting window properties:
         size = Integer.parseInt(JOptionPane.showInputDialog("n X n?"));
-        
+        AI = JOptionPane.showConfirmDialog(null, "Would you like to play VS AI?"
+        , "Game Type?" ,JOptionPane.YES_NO_OPTION);
+
         window.setSize(X, Y);
         window.setLocation(300, 180);
         window.setResizable(true);
@@ -125,18 +128,39 @@ public class GUI extends JFrame implements ActionListener
     {
         // get the mouse click from the user
         Object source = click.getSource();
-
         // check if a button was clicked on the gameboard
-        for(int currentMove=1; currentMove <= (size * size); ++currentMove) 
-        {
-            if(source == btnEmpty[currentMove] && remainingMoves < (size * size) + 1)  
+        if(AI == JOptionPane.NO_OPTION){
+            for(int currentMove=1; currentMove <= (size * size); ++currentMove) 
             {
-                btnEmptyClicked = true;
-                BusinessLogic.GetMove(currentMove, remainingMoves, font, 
-                    btnEmpty, startingPlayer);              
-                btnEmpty[currentMove].setEnabled(false);
-                pnlPlayingField.requestFocus();
-                ++remainingMoves;
+                if(source == btnEmpty[currentMove] && remainingMoves < (size * size) + 1)  
+                {
+                    btnEmptyClicked = true;
+                    BusinessLogic.GetMove(currentMove, remainingMoves, font, 
+                        btnEmpty, startingPlayer);              
+                    btnEmpty[currentMove].setEnabled(false);
+                    pnlPlayingField.requestFocus();
+                    ++remainingMoves;
+                }
+            }
+        }
+        else{
+            for(int currentMove=1; currentMove <= (size * size); ++currentMove) 
+            {
+                if(source == btnEmpty[currentMove] && remainingMoves < (size * size) + 1)  
+                {
+                    btnEmptyClicked = true;
+                    BusinessLogic.GetMove(currentMove, remainingMoves, font, 
+                        btnEmpty, startingPlayer);              
+                    btnEmpty[currentMove].setEnabled(false);
+                    pnlPlayingField.requestFocus();
+                    remainingMoves++;
+                    
+                    if(remainingMoves < (size * size) + 1){
+                        AI(currentMove, remainingMoves, 
+                            btnEmpty, startingPlayer);
+                        remainingMoves++;
+                    }
+                }
             }
         }
 
@@ -144,6 +168,11 @@ public class GUI extends JFrame implements ActionListener
         if(btnEmptyClicked) 
         {
             inGame = true;
+            if(AI == JOptionPane.YES_OPTION && remainingMoves < (size * size) + 2){
+                remainingMoves--;
+                CheckWin();
+                remainingMoves++;
+            }
             CheckWin();
             btnEmptyClicked = false;
         }
@@ -165,7 +194,7 @@ public class GUI extends JFrame implements ActionListener
                 if(inGame)  
                 {
                     int option = JOptionPane.showConfirmDialog(null, "If you start a new game," +
-                            " your current game will be lost..." + "n" +"Are you sure you want to continue?"
+                            " your current game will be lost..." + "Are you sure you want to continue?"
                         , "New Game?" ,JOptionPane.YES_NO_OPTION);
                     if(option == JOptionPane.YES_OPTION)    
                     {
@@ -274,7 +303,7 @@ public class GUI extends JFrame implements ActionListener
         String player;
         if(startingPlayer.equals("X"))
         {
-            if((remainingMoves-1) % 2 != 0)
+            if((remainingMoves - 1) % 2 != 0)
             {				
                 player = "X";
             }
@@ -285,7 +314,7 @@ public class GUI extends JFrame implements ActionListener
         }
         else
         {
-            if((remainingMoves-1) % 2 != 0)
+            if((remainingMoves - 1) % 2 != 0)
             {
                 player = "O";
             }
@@ -309,6 +338,9 @@ public class GUI extends JFrame implements ActionListener
                 else{
                     JOptionPane.showMessageDialog(null, "Player O Wins!!!!!");
                 }
+                startingPlayer = "";
+                setTableEnabled = false;
+                inGame = false;
                 RedrawGameBoard();
             }
         }
@@ -327,6 +359,9 @@ public class GUI extends JFrame implements ActionListener
                 else{
                     JOptionPane.showMessageDialog(null, "Player O Wins!!!!!");
                 }
+                startingPlayer = "";
+                setTableEnabled = false;
+                inGame = false;
                 RedrawGameBoard();
             }
         }
@@ -344,6 +379,9 @@ public class GUI extends JFrame implements ActionListener
             else{
                 JOptionPane.showMessageDialog(null, "Player O Wins!!!!!");
             }
+            startingPlayer = "";
+            setTableEnabled = false;
+            inGame = false;
             RedrawGameBoard();
         }
         a = true;
@@ -360,6 +398,9 @@ public class GUI extends JFrame implements ActionListener
             else{
                 JOptionPane.showMessageDialog(null, "Player O Wins!!!!!");
             }
+            startingPlayer = "";
+            setTableEnabled = false;
+            inGame = false;
             RedrawGameBoard();
         }
         a = true;
@@ -371,7 +412,44 @@ public class GUI extends JFrame implements ActionListener
         }
         if(a){
             JOptionPane.showMessageDialog(null, "Cats Game");
+            startingPlayer = "";
+            setTableEnabled = false;
+            inGame = false;
             RedrawGameBoard();
         }
+    }
+
+    public void AI(int currentMove, int remainingMoves, JButton btnEmpty[], 
+    String startingPlayer){
+        String player;
+        if(startingPlayer.equals("X"))
+        {
+            if((remainingMoves) % 2 != 0)
+            {				
+                player = "X";
+            }
+            else
+            {
+                player  = "O";
+            }
+        }
+        else
+        {
+            if((remainingMoves) % 2 != 0)
+            {
+                player = "O";
+            }
+            else
+            {
+                player = "X";
+            }
+        }
+        int a;
+        do{
+            a = (int)(Math.random() * (size * size)) + 1;
+        }while(!btnEmpty[a].getText().equals(""));
+        btnEmpty[a].setFont(font);
+        btnEmpty[a].setText(player);
+        btnEmpty[a].setEnabled(false);
     }
 }	
