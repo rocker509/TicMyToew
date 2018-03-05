@@ -504,6 +504,12 @@ public class GUI extends JFrame implements ActionListener
         String player;
         player = playerSetter(remainingMoves);
         int p = 0;
+        if(size == 3 && btnEmpty[5].getText().equals("")){
+            btnEmpty[5].setFont(font);
+            btnEmpty[5].setText(player);
+            btnEmpty[5].setEnabled(false);
+            return;
+        }
         for(int i = 1; i < btnEmpty.length; i += size){
             p = 0;
             for(int j = i; j < i + size; j++){
