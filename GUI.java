@@ -154,8 +154,8 @@ public class GUI extends JFrame implements ActionListener
                     btnEmpty[currentMove].setEnabled(false);
                     pnlPlayingField.requestFocus();
                     remainingMoves++;
-                    
-                    if(remainingMoves < (size * size) + 1){
+
+                    if(remainingMoves < (size * size) + 1 && !CheckWin2()){
                         AI(currentMove, remainingMoves, 
                             btnEmpty, startingPlayer);
                         remainingMoves++;
@@ -418,13 +418,12 @@ public class GUI extends JFrame implements ActionListener
             RedrawGameBoard();
         }
     }
-
-    public void AI(int currentMove, int remainingMoves, JButton btnEmpty[], 
-    String startingPlayer){
+    private boolean CheckWin2() 
+    {   
         String player;
         if(startingPlayer.equals("X"))
         {
-            if((remainingMoves) % 2 != 0)
+            if((remainingMoves - 1) % 2 != 0)
             {				
                 player = "X";
             }
@@ -435,7 +434,7 @@ public class GUI extends JFrame implements ActionListener
         }
         else
         {
-            if((remainingMoves) % 2 != 0)
+            if((remainingMoves - 1) % 2 != 0)
             {
                 player = "O";
             }
@@ -444,12 +443,236 @@ public class GUI extends JFrame implements ActionListener
                 player = "X";
             }
         }
-        int a;
+        for(int i = 1; i < btnEmpty.length; i += size){
+            boolean a = true;
+            for(int j = i; j < i + size; j++){
+                if(!btnEmpty[j].getText().equals(player)){
+                    a = false;
+                    break;
+                }
+            }
+            if(a){
+                return true;
+            }
+        }
+        for(int i = 1; i < btnEmpty.length / size + 1; i ++){
+            boolean a = true;
+            for(int j = i; j < btnEmpty.length; j += size){
+                if(!btnEmpty[j].getText().equals(player)){
+                    a = false;
+                    break;
+                }
+            }
+            if(a){
+                return true;
+            }
+        }
+        boolean a = true;
+        for(int i = 1; i < btnEmpty.length; i += (size + 1)){
+            if(!btnEmpty[i].getText().equals(player)){
+                a = false;
+                break;
+            }
+        }
+        if(a){
+            return true;
+        }
+        a = true;
+        for(int i = btnEmpty.length - size; i > 1; i -= (size - 1)){
+            if(!btnEmpty[i].getText().equals(player)){
+                a = false;
+                break;
+            }
+        }
+        if(a){
+            return true;
+        }
+        a = true;
+        for(int i = 1; i < btnEmpty.length; i++){
+            if(btnEmpty[i].getText().equals("")){
+                a = false;
+                break;
+            }
+        }
+        if(a){
+            return true;
+        }
+        return false;
+    }
+    public void AI(int currentMove, int remainingMoves, JButton btnEmpty[], 
+    String startingPlayer){
+        String player;
+        player = playerSetter(remainingMoves);
+        int p = 0;
+        for(int i = 1; i < btnEmpty.length; i += size){
+            p = 0;
+            for(int j = i; j < i + size; j++){
+                if(!btnEmpty[j].getText().equals(player)){
+                    p++;
+                }
+            }
+            if(p == 1){
+                for(int j = i; j < i + size; j++){
+                    if(btnEmpty[j].getText().equals("")){
+                        btnEmpty[j].setFont(font);
+                        btnEmpty[j].setText(player);
+                        btnEmpty[j].setEnabled(false);
+                        return;
+                    }
+                }
+            }
+        }
+        for(int i = 1; i < btnEmpty.length / size + 1; i ++){
+            p = 0;
+            for(int j = i; j < btnEmpty.length; j += size){
+                if(!btnEmpty[j].getText().equals(player)){
+                    p++;
+                }
+            }
+            if(p == 1){
+                for(int j = i; j < btnEmpty.length; j += size){
+                    if(btnEmpty[j].getText().equals("")){
+                        btnEmpty[j].setFont(font);
+                        btnEmpty[j].setText(player);
+                        btnEmpty[j].setEnabled(false);
+                        return;
+                    }
+                }
+            }
+        }
+        p = 0;
+        for(int i = 1; i < btnEmpty.length; i += (size + 1)){
+            if(!btnEmpty[i].getText().equals(player)){
+                p++;
+            }
+        }
+        if(p == 1){
+            for(int j = 1; j < btnEmpty.length; j += (size + 1)){
+                if(btnEmpty[j].getText().equals("")){
+                    btnEmpty[j].setFont(font);
+                    btnEmpty[j].setText(player);
+                    btnEmpty[j].setEnabled(false);
+                    return;
+                }
+            }
+        }
+        p = 0;
+        for(int i = btnEmpty.length - size; i > 1; i -= (size - 1)){
+            if(!btnEmpty[i].getText().equals(player)){
+                p++;
+            }
+        }
+        if(p == 1){
+            for(int j = btnEmpty.length - size; j > 1; j -= (size - 1)){
+                if(btnEmpty[j].getText().equals("")){
+                    btnEmpty[j].setFont(font);
+                    btnEmpty[j].setText(player);
+                    btnEmpty[j].setEnabled(false);
+                    return;
+                }
+            }
+        }
+        String eplayer = playerSetter(remainingMoves + 1);
+        for(int i = 1; i < btnEmpty.length; i += size){
+            p = 0;
+            for(int j = i; j < i + size; j++){
+                if(!btnEmpty[j].getText().equals(eplayer)){
+                    p++;
+                }
+            }
+            if(p == 1){
+                for(int j = i; j < i + size; j++){
+                    if(btnEmpty[j].getText().equals("")){
+                        btnEmpty[j].setFont(font);
+                        btnEmpty[j].setText(player);
+                        btnEmpty[j].setEnabled(false);
+                        return;
+                    }
+                }
+            }
+        }
+        for(int i = 1; i < btnEmpty.length / size + 1; i ++){
+            p = 0;
+            for(int j = i; j < btnEmpty.length; j += size){
+                if(!btnEmpty[j].getText().equals(eplayer)){
+                    p++;
+                }
+            }
+            if(p == 1){
+                for(int j = i; j < btnEmpty.length; j += size){
+                    if(btnEmpty[j].getText().equals("")){
+                        btnEmpty[j].setFont(font);
+                        btnEmpty[j].setText(player);
+                        btnEmpty[j].setEnabled(false);
+                        return;
+                    }
+                }
+            }
+        }
+        p = 0;
+        for(int i = 1; i < btnEmpty.length; i += (size + 1)){
+            if(!btnEmpty[i].getText().equals(eplayer)){
+                p++;
+            }
+        }
+        if(p == 1){
+            for(int j = 1; j < btnEmpty.length; j += (size + 1)){
+                if(btnEmpty[j].getText().equals("")){
+                    btnEmpty[j].setFont(font);
+                    btnEmpty[j].setText(player);
+                    btnEmpty[j].setEnabled(false);
+                    return;
+                }
+            }
+        }
+        p = 0;
+        for(int i = btnEmpty.length - size; i > 1; i -= (size - 1)){
+            if(!btnEmpty[i].getText().equals(eplayer)){
+                p++;
+            }
+        }
+        if(p == 1){
+            for(int j = btnEmpty.length - size; j > 1; j -= (size - 1)){
+                if(btnEmpty[j].getText().equals("")){
+                    btnEmpty[j].setFont(font);
+                    btnEmpty[j].setText(player);
+                    btnEmpty[j].setEnabled(false);
+                    return;
+                }
+            }
+        }
         do{
-            a = (int)(Math.random() * (size * size)) + 1;
-        }while(!btnEmpty[a].getText().equals(""));
-        btnEmpty[a].setFont(font);
-        btnEmpty[a].setText(player);
-        btnEmpty[a].setEnabled(false);
+            p = (int)(Math.random() * (size * size)) + 1;
+        }while(!btnEmpty[p].getText().equals(""));
+        btnEmpty[p].setFont(font);
+        btnEmpty[p].setText(player);
+        btnEmpty[p].setEnabled(false);
+    }
+
+    public String playerSetter(int i){
+        String player;
+        if(startingPlayer.equals("X"))
+        {
+            if((i) % 2 != 0)
+            {				
+                player = "X";
+            }
+            else
+            {
+                player  = "O";
+            }
+        }
+        else
+        {
+            if((i) % 2 != 0)
+            {
+                player = "O";
+            }
+            else
+            {
+                player = "X";
+            }
+        }
+        return player;
     }
 }	
